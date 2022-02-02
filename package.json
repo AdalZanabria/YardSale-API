@@ -24,6 +24,7 @@
     "prettier": "^2.5.1"
   },
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "faker": "^6.6.6"
   }
 }
