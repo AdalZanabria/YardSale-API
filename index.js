@@ -1,4 +1,5 @@
 const express = require('express');
+const {faker} = require('@faker-js/faker');
 
 const app = express();
 const port = 3000;
@@ -60,17 +61,21 @@ app.get('/people', (req, res) => {
   ]);
 });
 
+/*Según el size que mandemos por medio del query en el endpoint será la
+cantidad de objetos mostrados con 10 por defecto, ej: /products?size=20
+*/
 app.get('/products', (req, res) => {
-  res.json([
-    {
-      name: 'Producto 1',
-      price: 1000,
-    },
-    {
-      name: 'Producto 2',
-      price: 2000,
-    },
-  ]);
+  const products = [];
+  const {size} = req.query;
+  const limit = size || 10;
+  for (let index = 0; index < limit; index++){
+    products.push({
+      name: faker.commerce.productName(),
+      price: parseInt(faker.commerce.price(), 10),
+      image: faker.image.imageUrl(),
+    });
+  }
+  res.json(products);
 });
 
 app.get('/products/:id', (req, res) => {
