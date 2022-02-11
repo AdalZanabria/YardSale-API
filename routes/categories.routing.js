@@ -37,7 +37,7 @@ router.get('/:categoryId/products/:productId', (req, res) => {
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.json({
+  res.status(201).json({
     message: 'created',
     data: body
   }
