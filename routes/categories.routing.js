@@ -5,31 +5,63 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.json([
     {
+      id: 1,
       name: 'Ropa',
     },
     {
+      id: 2,
       name: 'Calzado',
     },
     {
+      id: 3,
       name: 'Accesorios',
     },
   ]);
 });
 
-router.get('/categories/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
   res.json({
     id,
-    name: 'Ropa',
+    name: `Category ${id}`,
   });
 });
 
-router.get('/categories/:categoryId/products/:productId', (req, res) => {
+router.get('/:categoryId/products/:productId', (req, res) => {
   const { categoryId, productId } = req.params;
   res.json({
     categoryId,
     productId,
   });
 });
+
+router.post('/', (req, res) => {
+  const body = req.body;
+  res.json({
+    message: 'created',
+    data: body
+  }
+  );
+})
+
+router.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: 'updated',
+    data: body,
+    id
+  }
+  );
+})
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({
+    message: 'deleted',
+    id
+  }
+  );
+})
 
 module.exports = router;
