@@ -1,54 +1,27 @@
 const express = require('express');
+const TecnicosService = require('../services/tecnicos.service');
 
 const router = express.Router();
+const service = new TecnicosService();
 
 router.get('/', (req, res) => {
-  res.json([
-    {
-      id: 0,
-      name: 'Mauricio',
-      area: 'Informatica',
-    },
-    {
-      id: 1,
-      name: 'Ivan',
-      area: 'Informatica',
-    },
-    {
-      id: 2,
-      name: 'Oscar',
-      area: 'Informatica',
-    },
-    {
-      id: 3,
-      name: 'Gustavo',
-      area: 'Informatica',
-    },
-    {
-      id: 4,
-      name: 'Adal',
-      area: 'Informatica',
-    },
-  ]);
+  const tecnicos = service.find();
+  res.json(tecnicos);
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    name: `Tecnico ${id}`,
-    area: `Area ${id}`,
-  });
+  const tecnico = service.findOne(id);
+  res.json(tecnico);
 });
 
 router.post('/', (req, res) => {
   const body = req.body;
   res.status(201).json({
     message: 'created',
-    data: body
-  }
-  );
-})
+    data: body,
+  });
+});
 
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
@@ -56,18 +29,16 @@ router.patch('/:id', (req, res) => {
   res.json({
     message: 'updated',
     data: body,
-    id
-  }
-  );
-})
+    id,
+  });
+});
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   res.json({
     message: 'deleted',
-    id
-  }
-  );
-})
+    id,
+  });
+});
 
 module.exports = router;
