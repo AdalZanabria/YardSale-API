@@ -1,36 +1,20 @@
 const express = require('express');
+const TasksService = require('../services/tasks.service');
 
 const router = express.Router();
+const service = new TasksService();
 
 router.get('/', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      caso: 'No hay internet.',
-    },
-    {
-      id: 2,
-      caso: 'No sirve impresora.',
-    },
-    {
-      id: 3,
-      caso: 'No sirve scanner.',
-    },
-    {
-      id: 4,
-      caso: 'No hay tonner.',
-    },
-  ]);
+  const tasks = service.find();
+  res.json(tasks);
 });
 
 // Todos los endpoints específicos deben de ir antes que los dinámicos
 //Los dos puntos antes de id significa que va a ser un parametro
 router.get('/:id', (req, res) => {
   const { id } = req.params; //Este nombre {id} tiene que ser el mismo que el nombre del endpoint :id
-  res.json({
-    id,
-    caso: `Tarea ${id}`,
-  });
+  const task = service.findOne(id);
+  res.json(task);
 });
 
 /* Así como hay endpoint /tasks/{id} y endpoint /people/{id} para tener tareas y personas en
@@ -41,10 +25,9 @@ router.post('/', (req, res) => {
   const body = req.body;
   res.status(201).json({
     message: 'created',
-    data: body
-  }
-  );
-})
+    data: body,
+  });
+});
 
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
@@ -52,18 +35,16 @@ router.patch('/:id', (req, res) => {
   res.json({
     message: 'updated',
     data: body,
-    id
-  }
-  );
-})
+    id,
+  });
+});
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   res.json({
     message: 'deleted',
-    id
-  }
-  );
-})
+    id,
+  });
+});
 
 module.exports = router;
