@@ -15,6 +15,7 @@ router.get('/:id', (req, res) => {
   res.json(category);
 });
 
+// Un producto dentro de una categoría
 router.get('/:categoryId/products/:productId', (req, res) => {
   const { categoryId, productId } = req.params;
   res.json({
@@ -25,28 +26,21 @@ router.get('/:categoryId/products/:productId', (req, res) => {
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json({
-    message: 'created',
-    data: body,
-  });
+  const newCategory = service.create(body);
+  res.status(201).json(newCategory);
 });
 
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.json({
-    message: 'updated',
-    data: body,
-    id,
-  });
+  const category = service.update(id, body);
+  res.json(category);
 });
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    message: 'deleted',
-    id,
-  });
+  const response = service.delete(id)
+  res.json(response);
 });
 
 module.exports = router;
