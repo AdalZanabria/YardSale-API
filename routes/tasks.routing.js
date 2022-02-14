@@ -23,28 +23,21 @@ específico, también puede haber /people/{id}/tasks para obtener las tareas de 
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json({
-    message: 'created',
-    data: body,
-  });
+  const newTask = service.create(body);
+  res.status(201).json(newTask);
 });
 
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.json({
-    message: 'updated',
-    data: body,
-    id,
-  });
+  const task = service.update(id, body);
+  res.json(task);
 });
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    message: 'deleted',
-    id,
-  });
+  const response = service.delete(id);
+  res.json(response);
 });
 
 module.exports = router;
