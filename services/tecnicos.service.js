@@ -29,7 +29,7 @@ class TecnicosService {
     ];
   }
 
-  create(data) {
+  async create(data) {
     const nuevoTecnico = {
       id: this.tecnicos.length,
       ...data,
@@ -38,15 +38,15 @@ class TecnicosService {
     return nuevoTecnico;
   }
 
-  find() {
+  async find() {
     return this.tecnicos;
   }
 
-  findOne(id) {
+  async findOne(id) {
     return this.tecnicos.find((tecnico) => tecnico.id == Number(id));
   }
 
-  update(id, changes) {
+  async update(id, changes) {
     const index = this.tecnicos.findIndex((tecnico) => tecnico.id == id);
     if (index === -1) {
       throw new Error('Técnico no encontrado.');
@@ -59,7 +59,7 @@ class TecnicosService {
     return this.tecnicos[index];
   }
 
-  delete(id) {
+  async delete(id) {
     const index = this.tecnicos.findIndex((tecnico) => tecnico.id == id);
     if (index === -1) {
       throw new Error('Técnico no encontrado');

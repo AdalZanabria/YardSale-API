@@ -4,16 +4,16 @@ const TasksService = require('../services/tasks.service');
 const router = express.Router();
 const service = new TasksService();
 
-router.get('/', (req, res) => {
-  const tasks = service.find();
+router.get('/', async (req, res) => {
+  const tasks = await service.find();
   res.json(tasks);
 });
 
 // Todos los endpoints específicos deben de ir antes que los dinámicos
 //Los dos puntos antes de id significa que va a ser un parametro
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params; //Este nombre {id} tiene que ser el mismo que el nombre del endpoint :id
-  const task = service.findOne(id);
+  const task = await service.findOne(id);
   res.json(task);
 });
 
@@ -21,23 +21,35 @@ router.get('/:id', (req, res) => {
 específico, también puede haber /people/{id}/tasks para obtener las tareas de ese usuario.
 */
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const body = req.body;
-  const newTask = service.create(body);
+  const newTask = await service.create(body);
   res.status(201).json(newTask);
 });
 
-router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const task = service.update(id, body);
-  res.json(task);
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const task = await service.update(id, body);
+    res.json(task);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
 });
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const response = service.delete(id);
-  res.json(response);
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await service.delete(id);
+    res.json(response);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    })
+  }
 });
 
 module.exports = router;

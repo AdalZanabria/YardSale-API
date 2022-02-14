@@ -20,7 +20,7 @@ class TasksService {
     ];
   }
 
-  create(data) {
+  async create(data) {
     const newTask = {
       id: this.tasks.length,
       ...data,
@@ -29,15 +29,15 @@ class TasksService {
     return newTask;
   }
 
-  find() {
+  async find() {
     return this.tasks;
   }
 
-  findOne(id) {
+  async findOne(id) {
     return this.tasks.find((task) => task.id == id);
   }
 
-  update(id, changes) {
+  async update(id, changes) {
     const index = this.tasks.findIndex((item) => item.id == id);
     if (index === -1) {
       throw new Error('Task not found')
@@ -50,7 +50,7 @@ class TasksService {
     return this.tasks[index];
   }
 
-  delete(id) {
+  async delete(id) {
     const index = this.tasks.findIndex((item) => item.id == id);
     if (index=== -1) {
       throw new Error('Task not found');
