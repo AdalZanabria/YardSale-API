@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom');
+
 class TasksService {
   constructor() {
     this.tasks = [
@@ -24,7 +26,7 @@ class TasksService {
     const newTask = {
       id: this.tasks.length,
       ...data,
-    }
+    };
     this.tasks.push(newTask);
     return newTask;
   }
@@ -34,26 +36,30 @@ class TasksService {
   }
 
   async findOne(id) {
-    return this.tasks.find((task) => task.id == id);
+    const task = this.tasks.find((task) => task.id == id);
+    if (!task) {
+      throw boom.notFound('Task not found.');
+    }
+    return task;
   }
 
   async update(id, changes) {
     const index = this.tasks.findIndex((item) => item.id == id);
     if (index === -1) {
-      throw new Error('Task not found')
+      throw boom.notFound('Task not found');
     }
     const task = this.tasks[index];
     this.tasks[index] = {
       ...task,
       ...changes,
-    }
+    };
     return this.tasks[index];
   }
 
   async delete(id) {
     const index = this.tasks.findIndex((item) => item.id == id);
-    if (index=== -1) {
-      throw new Error('Task not found');
+    if (index === -1) {
+      throw boom.notFound('Task not found');
     }
     this.tasks.splice(index, 1);
     return { id };

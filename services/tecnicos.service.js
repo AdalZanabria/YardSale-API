@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom');
+
 class TecnicosService {
   constructor() {
     this.tecnicos = [
@@ -43,18 +45,22 @@ class TecnicosService {
   }
 
   async findOne(id) {
-    return this.tecnicos.find((tecnico) => tecnico.id == Number(id));
+    const tecnico = this.tecnicos.find((tecnico) => tecnico.id == Number(id));
+    if (!tecnico) {
+      throw boom.notFound('Técnico no encontrado.');
+    }
+    return tecnico;
   }
 
   async update(id, changes) {
     const index = this.tecnicos.findIndex((tecnico) => tecnico.id == id);
     if (index === -1) {
-      throw new Error('Técnico no encontrado.');
+      throw boom.notFound('Técnico no encontrado.');
     }
     const tecnico = this.tecnicos[index];
     this.tecnicos[index] = {
-      ... tecnico,
-      ... changes
+      ...tecnico,
+      ...changes,
     };
     return this.tecnicos[index];
   }
@@ -62,7 +68,7 @@ class TecnicosService {
   async delete(id) {
     const index = this.tecnicos.findIndex((tecnico) => tecnico.id == id);
     if (index === -1) {
-      throw new Error('Técnico no encontrado');
+      throw boom.notFound('Técnico no encontrado');
     }
     this.tecnicos.splice(index, 1);
     return { id };

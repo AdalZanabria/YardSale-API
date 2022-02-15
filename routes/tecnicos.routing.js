@@ -9,10 +9,14 @@ router.get('/', async (req, res) => {
   res.json(tecnicos);
 });
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const tecnico = await service.findOne(id);
-  res.json(tecnico);
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const tecnico = await service.findOne(id);
+    res.json(tecnico);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/', async (req, res) => {
@@ -21,16 +25,14 @@ router.post('/', async (req, res) => {
   res.status(201).json(newTecnico);
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = req.body;
     const tecnico = await service.update(id, body);
     res.json(tecnico);
   } catch (error) {
-    res.status(404).json({
-      message: error.message,
-    });
+    next(error);
   }
 });
 
