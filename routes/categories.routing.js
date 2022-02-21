@@ -10,9 +10,13 @@ const {
 const router = express.Router();
 const service = new CategoriesService();
 
-router.get('/', async (req, res) => {
-  const categories = await service.find();
-  res.json(categories);
+router.get('/', async (req, res, next) => {
+  try {
+    const categories = await service.find();
+    res.json(categories);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get(
@@ -41,10 +45,14 @@ router.get('/:categoryId/products/:productId', (req, res) => {
 router.post(
   '/',
   validatorHandler(createCategorySchema, 'body'),
-  async (req, res) => {
-    const body = req.body;
-    const newCategory = await service.create(body);
-    res.status(201).json(newCategory);
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCategory = await service.create(body);
+      res.status(201).json(newCategory);
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
@@ -64,16 +72,18 @@ router.patch(
   }
 );
 
-router.delete('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const response = await service.delete(id);
-    res.json(response);
-  } catch (error) {
-    res.status(404).json({
-      message: error.message,
-    });
+router.delete(
+  '/:id',
+  validatorHandler(getCategorySchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const response = await service.delete(id);
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;

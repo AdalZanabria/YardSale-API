@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    enviroment:
+      - POSTGRES_DB= my_store
+      - POSTGRES_USER =adal
+      - POSTGRES_PW= admin123
+    ports:
+      - 5432:5432
