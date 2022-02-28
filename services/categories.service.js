@@ -1,36 +1,10 @@
 const boom = require('@hapi/boom');
-const pool = require('../libs/postgres.pool');
-
+const { models } = require('../libs/sequelize');
 class CategoriesService {
-  constructor() {
-    this.categories = [
-      {
-        id: 0,
-        name: 'Ropa',
-      },
-      {
-        id: 1,
-        name: 'Calzado',
-      },
-      {
-        id: 2,
-        name: 'Accesorios',
-      },
-      {
-        id: 3,
-        name: 'Electrónica',
-      },
-    ];
-    this.pool = pool;
-    this.pool.on('error', (err) => console.log(err));
-  }
+  constructor() {}
 
   async create(data) {
-    const newCategory = {
-      id: this.categories.length,
-      ...data,
-    };
-    this.categories.push(newCategory);
+    const newCategory = await models.Category.create(data);
     return newCategory;
   }
 
