@@ -9,38 +9,35 @@ class CategoriesService {
   }
 
   async find() {
-    const query = 'SELECT * FROM tasks';
-    const response = await this.pool.query(query);
-    return response.rows;
+    const categories = await models.Category.findAll();
+    return categories;
   }
 
   async findOne(id) {
-    const category = this.categories.find((category) => category.id == id);
+    const category = await models.Category.findByPk(id, {
+      include: ['products']
+    });
     if (!category) {
-      throw boom.notFound('Category not Found.');
+      throw boom.notFound('Category not found');
     }
     return category;
   }
 
   async update(id, changes) {
-    const index = this.categories.findIndex((item) => item.id == id);
-    if (index === -1) {
+    const category = await models.Category.findByPk(id);
+    if (!category) {
       throw boom.notFound('Category not found');
     }
-    const category = this.categories[index];
-    this.categories[index] = {
-      ...category,
-      ...changes,
-    };
-    return this.categories[index];
+    const response = await category.update(changes);
+    return response;
   }
 
   async delete(id) {
-    const index = this.categories.findIndex((item) => item.id == id);
-    if (index === -1) {
+    const category = await models.Category.findByPk(id);
+    if (!category) {
       throw boom.notFound('Category not found');
     }
-    this.categories.splice(index, 1);
+    await category.destroy();
     return { id };
   }
 }
