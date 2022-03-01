@@ -7,6 +7,7 @@ const {
   boomErrorHandler,
   ormErrorHandler,
 } = require('./middlewares/error.handler');
+const { checkApiKey } = require('./middlewares/auth.handler');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,6 +30,13 @@ app.use(cors(options));
 app.get('/', (req, res) => {
   res.send('Hola, este es mi server de prueba con express.');
 });
+
+app.get('/nueva-ruta',
+checkApiKey,
+(req, res, next) => {
+  res.send("Esta es una nueva ruta.")
+}
+);
 
 routerApi(app);
 
