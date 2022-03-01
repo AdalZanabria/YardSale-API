@@ -1,34 +1,25 @@
 const boom = require('@hapi/boom');
-const pool = require('../libs/postgres.pool');
+const { models } = require('../libs/sequelize');
 
 class OrdersService {
-  constructor() {
-    this.pool = pool;
-    this.pool.on('error', (err) => console.log(err));
-  }
+  constructor() {}
+
   async create(data) {
-    return data;
+    const newOrder = await models.Order.create(data);
+    return newOrder;
   }
 
-  async find() {
-    const query = 'SELECT * FROM tasks';
-    const response = this.pool.query(query);
-    return (await response).rows;
-  }
-
+  // include 'customer', relación desde order.model.js y su propia asociación hacia user
   async findOne(id) {
-    return { id };
-  }
-
-  async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
-  }
-
-  async delete(id) {
-    return { id };
+    const order = await models.Order.findByPk(id, {
+      include: [
+        {
+          association: 'customer',
+          include: ['user'],
+        },
+      ],
+    });
+    return order;
   }
 }
 
