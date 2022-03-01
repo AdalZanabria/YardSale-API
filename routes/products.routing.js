@@ -5,6 +5,7 @@ const {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
+  queryProductSchema,
 } = require('../schemas/product.schema');
 
 const router = express.Router();
@@ -13,10 +14,18 @@ const service = new ProductsService();
 /*Según el size que mandemos por medio del query en el endpoint será la
 cantidad de objetos mostrados con 10 por defecto, ej: /products?size=20
 */
-router.get('/', async (req, res) => {
-  const products = await service.find();
-  res.json(products);
-});
+router.get(
+  '/',
+  validatorHandler(queryProductSchema, 'query'),
+  async (req, res, next) => {
+    try {
+      const products = await service.find(req.query);
+      res.json(products);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   '/:id',
