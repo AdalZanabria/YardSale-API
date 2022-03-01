@@ -9,6 +9,11 @@ class OrdersService {
     return newOrder;
   }
 
+  async addItem(data) {
+    const newItem = await models.OrderProduct.create(data);
+    return newItem;
+  }
+
   // include 'customer', relación desde order.model.js y su propia asociación hacia user
   async findOne(id) {
     const order = await models.Order.findByPk(id, {
@@ -17,6 +22,7 @@ class OrdersService {
           association: 'customer',
           include: ['user'],
         },
+        'items',
       ],
     });
     if (!order) {
