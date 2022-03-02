@@ -34,7 +34,11 @@ app.get('/', (req, res) => {
 app.get('/nueva-ruta',
 checkApiKey,
 (req, res, next) => {
-  res.send("Esta es una nueva ruta.")
+  try {
+    res.send("Esta es una nueva ruta.")
+  } catch (error) {
+    next(error);
+  }
 }
 );
 
