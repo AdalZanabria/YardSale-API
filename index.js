@@ -27,20 +27,19 @@ const options = {
 };
 app.use(cors(options));
 
+require('./utils/auth');
+
 app.get('/', (req, res) => {
   res.send('Hola, este es mi server de prueba con express.');
 });
 
-app.get('/nueva-ruta',
-checkApiKey,
-(req, res, next) => {
+app.get('/nueva-ruta', checkApiKey, (req, res, next) => {
   try {
-    res.send("Esta es una nueva ruta.")
+    res.send('Esta es una nueva ruta.');
   } catch (error) {
     next(error);
   }
-}
-);
+});
 
 routerApi(app);
 
