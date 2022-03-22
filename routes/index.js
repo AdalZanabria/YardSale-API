@@ -8,6 +8,7 @@ const tecnicosRouter = require('./tecnicos.routing');
 const filterRouter = require('./filters.routing');
 const customersRouter = require('./customers.routing');
 const authRouter = require('./auth.routing');
+const profileRouter = require('./profile.routing');
 
 function routerApi(app) {
   const router = express.Router();
@@ -21,6 +22,7 @@ function routerApi(app) {
   router.use('/filters', filterRouter);
   router.use('/customers', customersRouter);
   router.use('/auth', authRouter);
+  router.use('/profile', profileRouter);
 }
 
 module.exports = routerApi;
